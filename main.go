@@ -10,7 +10,7 @@ func main() {
 	plugins.Serve(factory)
 }
 
-// factory returns a new instance of the Datadog APM plugin.
+// factory returns a new instance of the Cloudwatch APM plugin.
 func factory(log hclog.Logger) interface{} {
 	return cloudwatchPlugin.NewCloudWatchApmPlugin(log)
 }

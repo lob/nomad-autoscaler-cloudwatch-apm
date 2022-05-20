@@ -9,7 +9,6 @@ Vagrant.configure("2") do |config|
   config.vm.network "forwarded_port", guest: 8500, host: 8500, host_ip: "127.0.0.1"    # Consul UI
   config.vm.network "forwarded_port", guest: 8080, host: 8080, host_ip: "127.0.0.1"    # Nomad Autoscaler health check
   config.vm.network "forwarded_port", guest: 8000, host: 8000, host_ip: "127.0.0.1"    # Demo webapp
-  config.vm.network "forwarded_port", guest: 1936, host: 1936, host_ip: "127.0.0.1"    # HAProxy stats
 
   # Share current directory with jobs and configuration files with the VM. Add
   # the shared files in a sub-dir.

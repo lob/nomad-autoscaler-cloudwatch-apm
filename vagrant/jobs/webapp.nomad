@@ -15,6 +15,7 @@ job "webapp" {
 
       policy {
         cooldown = "20s"
+        evaluation_interval = "5s"
 
         check "cloudwatch" {
           source = "cloudwatch"
