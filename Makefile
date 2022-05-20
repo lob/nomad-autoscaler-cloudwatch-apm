@@ -1,5 +1,5 @@
 LDFLAGS := "-s -w"
-.PHONY: all
+export CGO_ENABLED=0
 
 .PHONY: test
 test:
@@ -13,6 +13,9 @@ build:
 dist:
 	rm -rf dist
 	mkdir -p dist
-	GOOS=linux GOARCH=amd64 go build -ldflags "-s -w" -a -o "dist/nomad-autoscaler-cloudwatch-apm_linux_amd64"
-	GOOS=linux GOARCH=arm go build -ldflags "-s -w" -a -o "dist/nomad-autoscaler-cloudwatch-apm_linux_arm"
-	GOOS=darwin GOARCH=amd64 go build -ldflags "-s -w" -a -o "dist/nomad-autoscaler-cloudwatch-apm_darwin_amd64"
+	GOOS=linux GOARCH=amd64 go build -ldflags $(LDFLAGS) -a -o dist/nomad-autoscaler-cloudwatch-apm_linux_amd64
+	GOOS=linux GOARCH=arm64 go build -ldflags $(LDFLAGS) -a -o dist/nomad-autoscaler-cloudwatch-apm_linux_arm64
+	GOOS=darwin GOARCH=amd64 go build -ldflags $(LDFLAGS) -a -o dist/nomad-autoscaler-cloudwatch-apm_darwin_amd64
+	GOOS=darwin GOARCH=arm64 go build -ldflags $(LDFLAGS) -a -o dist/nomad-autoscaler-cloudwatch-apm_darwin_arm64
+	GOOS=windows GOARCH=amd64 go build -ldflags $(LDFLAGS) -a -o dist/nomad-autoscaler-cloudwatch-apm_windows_amd64
+

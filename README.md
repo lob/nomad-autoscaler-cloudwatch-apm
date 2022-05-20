@@ -1,35 +1,50 @@
-# Nomad Autoscaler CloudWatch APM Plugin
+# Nomad Autoscaler CloudWatch APM
 
-A plugin to autoscale using CloudWatch Metrics.
+A Nomad Autoscaler APM plugin to scale Nomad jobs using CloudWatch Metrics.
+
+**This software is in early development and should be used with caution.**
+
+*Feedback and contributions are welcome :-)*
+
+## Plugin Configuration
+
+To use the plugin you will need to download the binary to the client nodes and add the following block into the Nomad Autoscaler configuration. 
+
+If the `aws_access_key_id` and `aws_secret_access_key` settings are omitted the plugin will use the instance role to authenticate with the CloudWatch API. 
+
+The IAM user or role requires the `cloudwatch:GetMetricData` permission.
+
+```hcl
+apm "cloudwatch" {
+  driver = "nomad-autoscaler-cloudwatch-apm"
+
+  config = {
+    aws_region            = "us-east-1"
+    aws_access_key_id     = "<AWS_ACCESS_KEY_ID>"
+    aws_secret_access_key = "<AWS_SECRET_ACCESS_KEY>"
+  }
+}
 
 ```
-scaling {
-  enabled = true
-  min     = 1
-  max     = 20
 
-  policy {
-    cooldown = "20s"
+## Policy Configuration
 
-    check "cloudwatch" {
-      source = "cloudwatch"
-      query  = "SELECT MAX(ApproximateNumberOfMessagesVisible) FROM SCHEMA(\"AWS/SQS\", QueueName) WHERE QueueName = 'MY_SQS_QUEUE'"
+To scale a job with CloudWatch Metrics add the following block to your scaling policy. The query string is passed directly to the CloudWatch metrics API. Further details on the query syntax can be found in the [CloudWatch documentation](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/query_with_cloudwatch-metrics-insights.html).
 
-      strategy "target-value" {
-        target = 50
-      }
-    }
+```hcl
+check "cloudwatch" {
+  source = "cloudwatch"
+  query  = <<-QUERY
+    SELECT MAX(ApproximateNumberOfMessagesVisible) FROM SCHEMA("AWS/SQS", QueueName) WHERE QueueName = '<QUEUE_NAME>'
+  QUERY
+
+  strategy "target-value" {
+    target = 50
   }
 }
 ```
 
-## Testing
+## Example
 
-A Vagrant box with a Nomad has been provided for local testing.
+A Vagrant box with a working demo of the CloudWatch APM plugin has been provided in the [example](./example) folder.
 
-1. First create an IAM user that has the `cloudwatch:GetMetricData` permssion. Add these credentials to `vagrant/jobs/autoscaler.nomad` jobspec.
-2. Inspect the `vagrant/jobs/webapp.nomad` scaling configuration and update accordingly
-3. Next compile the plugin by running `make dist` in the root folder.
-4. Boot the VM by running `cd vagrant` and then `vagrant up`
-5. Once the VM is setup run `cd jobs` and run the three jobs (haproxy first, then autoscaler, then webapp)
-6. You can observe the logs for the autoscaler to see the CloudWatch API calls

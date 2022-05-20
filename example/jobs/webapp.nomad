@@ -9,12 +9,13 @@ job "webapp" {
     }
 
     scaling {
-      enabled = true
+      enabled = false
       min     = 1
       max     = 20
 
       policy {
         cooldown = "20s"
+        evaluation_interval = "5s"
 
         check "cloudwatch" {
           source = "cloudwatch"
