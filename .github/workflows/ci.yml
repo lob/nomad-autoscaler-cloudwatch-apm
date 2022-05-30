@@ -2,11 +2,10 @@ name: CI
 
 on:
   push:
-  pull_request:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64, lob-runner]
     steps:
       - uses: actions/setup-go@v2
         with:
