@@ -25,4 +25,4 @@ jobs:
           args: "./dist/*"
 
       - run: |
-          aws s3 sync dist s3://nomad-autoscaler-cloudwatch-apm.lob-ci.com/nomad-autoscaler-cloudwatch-apm/{{ github.event.release.tag_name }} --acl private --delete
+          aws s3 sync dist s3://nomad-autoscaler-cloudwatch-apm/{{ github.event.release.tag_name }} --acl private --delete
