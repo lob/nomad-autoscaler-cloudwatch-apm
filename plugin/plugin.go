@@ -133,7 +133,6 @@ func (p *CloudWatchApmPlugin) Query(q string, r sdk.TimeRange) (sdk.TimestampedM
 }
 
 func (p *CloudWatchApmPlugin) QueryMultiple(q string, r sdk.TimeRange) ([]sdk.TimestampedMetrics, error) {
-	p.logger.Debug("query request", "query", q, "range", r)
 	ctx, cancel := context.WithTimeout(p.clientCtx, 10*time.Second)
 	defer cancel()
 
@@ -154,13 +153,30 @@ func (p *CloudWatchApmPlugin) QueryMultiple(q string, r sdk.TimeRange) ([]sdk.Ti
 	res, err := p.client.GetMetricData(ctx, &input)
 
 	if err != nil {
-		p.logger.Error("Failed to get output", err)
+		p.logger.Error(
+			"Failed to get output",
+			"error", err,
+			"query", q,
+			"from", r.From,
+			"to", r.To,
+		)
 		return nil, fmt.Errorf("error querying metrics from cloudwtch: %v", err)
 	}
 
-	p.logger.Info("Received Metric Data", "data", res)
+	p.logger.Info(
+		"Received Metric Data",
+		"data", res,
+		"query", q,
+		"from", r.From,
+		"to", r.To,
+	)
 	if len(res.MetricDataResults) == 0 {
-		p.logger.Warn("empty time series response from cloudwatch, try a wider query window")
+		p.logger.Warn(
+			"empty time series response from cloudwatch, try a wider query window",
+			"query", q,
+			"from", r.From,
+			"to", r.To,
+		)
 		return nil, nil
 	}
 
@@ -181,7 +197,12 @@ func (p *CloudWatchApmPlugin) QueryMultiple(q string, r sdk.TimeRange) ([]sdk.Ti
 	}
 
 	if len(results) == 0 {
-		p.logger.Warn("no data points found in time series response from cloudwatch, try a wider query window")
+		p.logger.Warn(
+			"no data points found in time series response from cloudwatch, try a wider query window",
+			"query", q,
+			"from", r.From,
+			"to", r.To,
+		)
 	}
 
 	return results, nil
