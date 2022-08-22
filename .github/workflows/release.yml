@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64, lob-runner]
     steps:
       - uses: actions/setup-go@v2
         with:
@@ -23,3 +23,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           args: "./dist/*"
+
+      - run: |
+          aws s3 sync dist s3://nomad-autoscaler-cloudwatch-apm/{{ github.event.release.tag_name }} --acl private --delete
