@@ -2,10 +2,6 @@
 
 A Nomad Autoscaler APM plugin to scale Nomad jobs using CloudWatch Metrics.
 
-## Example
-
-An Vagrant box with a working demo of the CloudWatch APM plugin has been provided in in the [example](./example) folder.
-
 ## Plugin Configuration
 
 To use the plugin you will need download the binary to the client nodes and add the following block into the Nomad Autoscaler configuration. 
@@ -43,4 +39,8 @@ check "cloudwatch" {
   }
 }
 ```
+
+## Example
+
+A Vagrant box with a working demo of the CloudWatch APM plugin has been provided in in the [example](./example) folder.
 
