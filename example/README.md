@@ -11,4 +11,4 @@ Next compile the plugin by running `make dist` in the root folder.
 
 Once compiled you can boot the VM by running `cd example` and then `vagrant up`. This will start Nomad and the Nomad Autoscaler and the Demo app.
 
-You can observe the logs for the autoscaler to see the CloudWatch API calls
+Nomad will be accessible on http://localhost:4646. Once running you will be able to observe the logs for the Autoscaler to see the CloudWatch API calls
