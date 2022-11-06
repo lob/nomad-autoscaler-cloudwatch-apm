@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: [self-hosted, linux, x64, lob-runner]
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -27,7 +27,3 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           args: "./dist/*"
-
-      - name: Publish (Internal)
-        run: |
-          aws s3 sync dist s3://nomad-autoscaler-cloudwatch-apm/${{github.event.release.tag_name}} --acl private --delete

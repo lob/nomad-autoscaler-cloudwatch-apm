@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    runs-on: [self-hosted, linux, x64, lob-runner]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/setup-go@v2
         with:
