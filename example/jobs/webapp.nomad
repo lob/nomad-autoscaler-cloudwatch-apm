@@ -9,7 +9,7 @@ job "webapp" {
     }
 
     scaling {
-      enabled = true
+      enabled = false
       min     = 1
       max     = 20
 

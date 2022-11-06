@@ -8,21 +8,27 @@ jobs:
   build:
     runs-on: [self-hosted, linux, x64, lob-runner]
     steps:
-      - uses: actions/setup-go@v2
+
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+      
+      - name: Setup Go
+        uses: actions/setup-go@v2
         with:
           go-version: ^1.17
 
-      - uses: actions/checkout@v2.3.4
-        with:
-          fetch-depth: 1
+      - name: Build
+        run: make test dist
 
-      - run: make test dist
-
-      - uses: skx/github-action-publish-binaries@master
+      - name: Publish (Public)
+        uses: skx/github-action-publish-binaries@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           args: "./dist/*"
 
+      - name: Publish (Internal)
       - run: |
           aws s3 sync dist s3://nomad-autoscaler-cloudwatch-apm/${{github.event.release.tag_name}} --acl private --delete

@@ -1,8 +1,27 @@
-# Nomad Autoscaler CloudWatch APM Plugin
+# Nomad Autoscaler CloudWatch APM
 
-A plugin to autoscale using CloudWatch Metrics.
+A Nomad Autoscaler APM plugin to scale Nomad jobs using CloudWatch Metrics.
+
+## Plugin Configuration
+
+```hcl
+apm "cloudwatch" {
+  driver = "nomad-autoscaler-cloudwatch-apm"
+
+  config = {
+    aws_region            = "us-east-1"
+    aws_access_key_id     = "CHANGEME"
+    aws_secret_access_key = "CHANGEME"
+    aws_session_token     = "CHANGEME"
+  }
+}
 
 ```
+
+
+## Policy Configuration
+
+```golang
 scaling {
   enabled = true
   min     = 1
@@ -13,7 +32,9 @@ scaling {
 
     check "cloudwatch" {
       source = "cloudwatch"
-      query  = "SELECT MAX(ApproximateNumberOfMessagesVisible) FROM SCHEMA(\"AWS/SQS\", QueueName) WHERE QueueName = 'MY_SQS_QUEUE'"
+      query  = <<-QUERY
+        SELECT MAX(ApproximateNumberOfMessagesVisible) FROM SCHEMA("AWS/SQS", QueueName) WHERE QueueName = 'MY_QUEUE'
+      QUERY
 
       strategy "target-value" {
         target = 50
@@ -23,13 +44,13 @@ scaling {
 }
 ```
 
-## Testing
+## Minimal IAM Policy
 
-A Vagrant box with a Nomad has been provided for local testing.
+```
+IAM POLICY
+```
 
-1. First create an IAM user that has the `cloudwatch:GetMetricData` permssion. Add these credentials to `vagrant/jobs/autoscaler.nomad` jobspec.
-2. Inspect the `vagrant/jobs/webapp.nomad` scaling configuration and update accordingly
-3. Next compile the plugin by running `make dist` in the root folder.
-4. Boot the VM by running `cd vagrant` and then `vagrant up`
-5. Once the VM is setup run `cd jobs` and run the three jobs (haproxy first, then autoscaler, then webapp)
-6. You can observe the logs for the autoscaler to see the CloudWatch API calls
+
+
+
+

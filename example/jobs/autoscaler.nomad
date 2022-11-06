@@ -46,10 +46,10 @@ apm "cloudwatch" {
   driver = "nomad-autoscaler-cloudwatch-apm"
 
   config = {
-    aws_region            = "us-west-2"
-    aws_access_key_id     = ""
-    aws_secret_access_key = ""
-    aws_session_token     = ""
+    aws_region            = "us-east-1"
+    aws_access_key_id     = "CHANGEME"
+    aws_secret_access_key = "CHANGEME"
+    aws_session_token     = "CHANGEME"
   }
 }
 
