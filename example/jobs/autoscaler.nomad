@@ -47,9 +47,9 @@ apm "cloudwatch" {
 
   config = {
     aws_region            = "us-east-1"
-    aws_access_key_id     = "CHANGEME"
-    aws_secret_access_key = "CHANGEME"
-    aws_session_token     = "CHANGEME"
+    aws_access_key_id     = "<AWS_ACCESS_KEY_ID>"
+    aws_secret_access_key = "<AWS_SECRET_ACCESS_KEY>"
+    aws_session_token     = "<AWS_SESSION_TOKEN>"
   }
 }
 
