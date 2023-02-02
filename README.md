@@ -2,6 +2,10 @@
 
 A Nomad Autoscaler APM plugin to scale Nomad jobs using CloudWatch Metrics.
 
+**This software is in early development and should be used with caution.**
+
+*Feedback and contributions are welcome :-)*
+
 ## Plugin Configuration
 
 To use the plugin you will need download the binary to the client nodes and add the following block into the Nomad Autoscaler configuration. 
