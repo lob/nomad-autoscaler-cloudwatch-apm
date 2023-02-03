@@ -1,6 +1,7 @@
 # CloudWatch Nomad Autoscaler Example
 
 A Vagrant box with Nomad, Nomad Autoscaler and the CloudWatch APM driver for local testing.
+
 ## Getting Started
 
 First create an IAM user that has the `cloudwatch:GetMetricData` permssion. Add these credentials to `example/jobs/autoscaler.nomad` jobspec.
