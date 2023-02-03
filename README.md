@@ -8,7 +8,7 @@ A Nomad Autoscaler APM plugin to scale Nomad jobs using CloudWatch Metrics.
 
 ## Plugin Configuration
 
-To use the plugin you will need download the binary to the client nodes and add the following block into the Nomad Autoscaler configuration. 
+To use the plugin you will need to download the binary to the client nodes and add the following block into the Nomad Autoscaler configuration. 
 
 If the `aws_access_key_id` and `aws_secret_access_key` settings are omitted the plugin will use the instance role to authenticate with the CloudWatch API. 
 
@@ -46,5 +46,5 @@ check "cloudwatch" {
 
 ## Example
 
-A Vagrant box with a working demo of the CloudWatch APM plugin has been provided in in the [example](./example) folder.
+A Vagrant box with a working demo of the CloudWatch APM plugin has been provided in the [example](./example) folder.
 
