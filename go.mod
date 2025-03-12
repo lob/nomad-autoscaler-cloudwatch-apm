@@ -39,9 +39,9 @@ require (
 	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
 	github.com/oklog/run v1.0.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	golang.org/x/net v0.0.0-20210226172049-e18ecbb05110 // indirect
-	golang.org/x/sys v0.0.0-20210426230700-d19ff857e887 // indirect
-	golang.org/x/text v0.3.6 // indirect
+	golang.org/x/net v0.33.0 // indirect
+	golang.org/x/sys v0.28.0 // indirect
+	golang.org/x/text v0.21.0 // indirect
 	google.golang.org/genproto v0.0.0-20210119180700-e258113e47cc // indirect
 	google.golang.org/grpc v1.35.0 // indirect
 	google.golang.org/protobuf v1.25.0 // indirect
