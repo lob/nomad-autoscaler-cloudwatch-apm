@@ -93,7 +93,6 @@ func (p *CloudWatchApmPlugin) SetConfig(config map[string]string) error {
 	// supplied configuration. In order to use these static credentials both
 	// the access key and secret key need to be present; the session token is
 	// optional.
-	// If not found, EC2RoleProvider will be instantiated instead.
 	keyID := config[configKeyAccessID]
 	secretKey := config[configKeySecretKey]
 	session := config[configKeySessionToken]
@@ -102,8 +101,7 @@ func (p *CloudWatchApmPlugin) SetConfig(config map[string]string) error {
 		p.logger.Trace("setting AWS access credentials from config map")
 		cfg.Credentials = credentials.NewStaticCredentialsProvider(keyID, secretKey, session)
 	} else {
-		p.logger.Trace("AWS access credentials empty - using EC2 instance role credentials instead")
-		cfg.Credentials = aws.NewCredentialsCache(ec2rolecreds.New())
+		p.logger.Trace("AWS access credentials empty - using default credentials")
 	}
 
 	// Set up our AWS client.
