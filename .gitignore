@@ -1,2 +1,4 @@
 dist
 .vagrant
+
+nomad-autoscaler-cloudwatch-apm
