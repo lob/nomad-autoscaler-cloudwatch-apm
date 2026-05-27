@@ -25,10 +25,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
-- Go toolchain bumped from `1.23.7` → `1.25.3` (`.go-version` and both CI/release workflows).
+- Go toolchain bumped from `1.23.7` → `1.25.10` (`.go-version` and both CI/release workflows).
 - `actions/setup-go` bumped from `v2` → `v5` in `.github/workflows/ci.yml` and `.github/workflows/release.yml`.
 - `actions/checkout` bumped from `v2` → `v4` in `.github/workflows/release.yml`.
-- `.gitignore` expanded with the canonical Go and macOS templates from `github/gitignore`, covering build artifacts, test binaries, coverage profiles, `go.work`, `.env`, `.DS_Store`, and macOS system directories.
+- `github.com/hashicorp/go-hclog` bumped from `v0.16.0` → `v1.6.3` (major version; API-compatible, picked up via MVS from updated transitive deps).
+- `.gitignore` expanded with the canonical Go and macOS templates from `github/gitignore`, covering build artifacts, test binaries, coverage profiles, `go.work`, `.env`, `.DS_Store`, macOS system directories, and internal `docs/superpowers/` planning artifacts.
 
 ---
 
