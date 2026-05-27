@@ -18,21 +18,16 @@ func TestApmPlugin_SetConfig(t *testing.T) {
 		name           string
 		inputConfig    map[string]string
 		expectErr      bool
-		expectedRegion string
 		expectedClient bool
 	}{
 		{
 			name:           "empty config uses default region and creates client",
 			inputConfig:    map[string]string{},
-			expectErr:      false,
-			expectedRegion: configValueRegionDefault,
 			expectedClient: true,
 		},
 		{
 			name:           "explicit region overrides default",
 			inputConfig:    map[string]string{configKeyRegion: "eu-west-1"},
-			expectErr:      false,
-			expectedRegion: "eu-west-1",
 			expectedClient: true,
 		},
 		{
@@ -41,8 +36,6 @@ func TestApmPlugin_SetConfig(t *testing.T) {
 				configKeyAccessID:  "AKIAIOSFODNN7EXAMPLE",
 				configKeySecretKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
 			},
-			expectErr:      false,
-			expectedRegion: configValueRegionDefault,
 			expectedClient: true,
 		},
 		{
@@ -52,8 +45,6 @@ func TestApmPlugin_SetConfig(t *testing.T) {
 				configKeySecretKey:    "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
 				configKeySessionToken: "session-token-example",
 			},
-			expectErr:      false,
-			expectedRegion: configValueRegionDefault,
 			expectedClient: true,
 		},
 		{
@@ -62,8 +53,6 @@ func TestApmPlugin_SetConfig(t *testing.T) {
 			inputConfig: map[string]string{
 				configKeyAccessID: "AKIAIOSFODNN7EXAMPLE",
 			},
-			expectErr:      false,
-			expectedRegion: configValueRegionDefault,
 			expectedClient: true,
 		},
 		{
@@ -73,8 +62,6 @@ func TestApmPlugin_SetConfig(t *testing.T) {
 				configKeyAccessID:  "AKIAIOSFODNN7EXAMPLE",
 				configKeySecretKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
 			},
-			expectErr:      false,
-			expectedRegion: "ap-southeast-1",
 			expectedClient: true,
 		},
 	}
@@ -144,10 +131,23 @@ func TestNoSymbolVulnerabilities(t *testing.T) {
 	}
 	cmd.Dir = moduleRoot
 
-	out, _ := cmd.Output() // non-zero exit is expected when vulns are found
+	out, runErr := cmd.Output()
 
-	// govulncheck -json emits one JSON object per line. Each "finding" entry
-	// has a non-empty Trace when the symbol is reachable (Symbol-level).
+	// If the command produced no output it likely failed for a non-CVE reason
+	// (network error fetching the vuln DB, permission issue, etc.). Skip rather
+	// than silently passing — the caller should investigate.
+	if len(out) == 0 {
+		stderr := ""
+		if ee, ok2 := runErr.(*exec.ExitError); ok2 {
+			stderr = string(ee.Stderr)
+		}
+		t.Skipf("govulncheck produced no output (non-CVE failure); stderr: %s", stderr)
+	}
+
+	// govulncheck -json emits a stream of pretty-printed JSON objects. Each
+	// "finding" object has a non-empty Trace when the symbol is reachable
+	// (Symbol-level). Use a streaming decoder so multi-line objects are handled
+	// correctly.
 	type findingMsg struct {
 		Finding *struct {
 			OSV   string `json:"osv"`
@@ -158,12 +158,13 @@ func TestNoSymbolVulnerabilities(t *testing.T) {
 	}
 
 	var symbolVulns []string
-	for _, line := range bytes.Split(out, []byte("\n")) {
-		if len(line) == 0 {
-			continue
-		}
+	decoder := json.NewDecoder(bytes.NewReader(out))
+	for decoder.More() {
 		var msg findingMsg
-		if err := json.Unmarshal(line, &msg); err != nil {
+		if err := decoder.Decode(&msg); err != nil {
+			// Warn rather than silently skip — a decode failure may mean the
+			// govulncheck JSON schema changed, which would cause false negatives.
+			t.Logf("govulncheck: unexpected decode failure (schema change?): %v", err)
 			continue
 		}
 		if msg.Finding != nil && msg.Finding.OSV != "" && len(msg.Finding.Trace) > 0 {

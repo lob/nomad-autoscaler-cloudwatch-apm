@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `google.golang.org/grpc` resolved to `v1.81.1` via MVS, fixing Symbol-level CVEs GO-2026-4762 (authorization bypass) and GO-2023-2153 (HTTP/2 Rapid Reset DoS). Both were reachable through the binary's call graph.
 - `google.golang.org/protobuf` resolved to `v1.36.11`, fixing GO-2024-2611 (infinite loop in JSON unmarshaling).
 - `govulncheck ./...` now reports **no vulnerabilities**.
+- `golang.org/x/telemetry` added as an indirect dependency (pulled in by `golang.org/x/vuln`). This is the Go team's own opt-in telemetry package; it does not transmit data unless explicitly enabled and has no effect on plugin behavior.
 
 ### Added
 
