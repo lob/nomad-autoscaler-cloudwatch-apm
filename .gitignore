@@ -1,3 +1,6 @@
+# Internal AI planning artifacts
+docs/superpowers/
+
 # Build output
 dist
 nomad-autoscaler-cloudwatch-apm
