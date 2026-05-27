@@ -6,6 +6,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      GOTELEMETRY: "off"
     steps:
       - uses: actions/setup-go@v5
         with:
