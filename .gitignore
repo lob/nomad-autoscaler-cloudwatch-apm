@@ -1,4 +1,69 @@
+# Internal AI planning artifacts
+docs/superpowers/
+
+# Build output
 dist
+nomad-autoscaler-cloudwatch-apm
+
+# Vagrant
 .vagrant
 
-nomad-autoscaler-cloudwatch-apm
+# ============================================================
+# Go (github.com/github/gitignore — Go.gitignore)
+# ============================================================
+
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Code coverage profiles and other test artifacts
+*.out
+coverage.*
+*.coverprofile
+profile.cov
+
+# Dependency directories
+# vendor/
+
+# Go workspace file
+go.work
+go.work.sum
+
+# env file
+.env
+
+# ============================================================
+# macOS (github.com/github/gitignore — Global/macOS.gitignore)
+# ============================================================
+
+# General
+.DS_Store
+.localized
+__MACOSX/
+.AppleDouble
+.LSOverride
+
+# Resource forks
+._*
+
+# Files and directories that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk

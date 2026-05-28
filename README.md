@@ -48,3 +48,7 @@ check "cloudwatch" {
 
 A Vagrant box with a working demo of the CloudWatch APM plugin has been provided in the [example](./example) folder.
 
+## Internal deployment at Lob
+
+If you are deploying this plugin internally at Lob, see the [Autoscaling apps in Nomad](https://www.notion.so/d76e950303dd4fb58140ba2bd3f60e5b) Notion page for release and deployment instructions.
+

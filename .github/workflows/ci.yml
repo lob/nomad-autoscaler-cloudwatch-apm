@@ -6,10 +6,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      GOTELEMETRY: "off"
     steps:
-      - uses: actions/setup-go@v2
+      - uses: actions/setup-go@v5
         with:
-          go-version: ^1.23
+          go-version: ^1.25
 
       - uses: actions/checkout@v4
         with:
