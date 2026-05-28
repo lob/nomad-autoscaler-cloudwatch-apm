@@ -23,11 +23,16 @@ jobs:
         run: |
           gh release download "${{ inputs.version }}" \
             --pattern "nomad-autoscaler-cloudwatch-apm_linux_*" \
+            --pattern "nomad-autoscaler-cloudwatch-apm_darwin_*" \
             --dir ./dist
 
       - name: Upload to S3
         run: |
-          aws s3 cp dist/nomad-autoscaler-cloudwatch-apm_linux_amd64 \
-            s3://lob-nomad-autoscaler-plugins/cloudwatch/${{ inputs.version }}/nomad-autoscaler-cloudwatch-apm_linux_amd64
-          aws s3 cp dist/nomad-autoscaler-cloudwatch-apm_linux_arm64 \
-            s3://lob-nomad-autoscaler-plugins/cloudwatch/${{ inputs.version }}/nomad-autoscaler-cloudwatch-apm_linux_arm64
+          for binary in \
+            nomad-autoscaler-cloudwatch-apm_linux_amd64 \
+            nomad-autoscaler-cloudwatch-apm_linux_arm64 \
+            nomad-autoscaler-cloudwatch-apm_darwin_amd64 \
+            nomad-autoscaler-cloudwatch-apm_darwin_arm64; do
+            aws s3 cp "dist/${binary}" \
+              "s3://lob-nomad-autoscaler-plugins/cloudwatch/${{ inputs.version }}/${binary}"
+          done
