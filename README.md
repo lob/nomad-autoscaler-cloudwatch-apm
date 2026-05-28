@@ -48,48 +48,7 @@ check "cloudwatch" {
 
 A Vagrant box with a working demo of the CloudWatch APM plugin has been provided in the [example](./example) folder.
 
-## Releasing a New Version
+## Internal deployment at Lob
 
-Releases are fully manual. There is no automated versioning — the version lives only in the GitHub Release tag.
-
-### Steps
-
-1. **Update CHANGELOG.md** — move entries from `[Unreleased]` into a new versioned section (e.g. `## [0.1.3] — YYYY-MM-DD`).
-
-2. **Merge to `main`** — open a PR with your CHANGELOG update and any other changes, then merge it.
-
-3. **Create a GitHub Release** — via the GitHub UI or CLI:
-   ```bash
-   gh release create v0.1.3 --title "v0.1.3" --notes "See CHANGELOG.md"
-   ```
-   Use a `v`-prefixed semver tag (e.g. `v0.1.3`). Creating the release triggers the `Release` workflow, which builds binaries for all platforms and attaches them to the release.
-
-4. **Publish to S3** — once the `Release` workflow completes, run the `Publish to S3` workflow manually:
-   - GitHub UI: **Actions → Publish to S3 → Run workflow**, enter the version tag (e.g. `v0.1.3`).
-   - CLI: `gh workflow run publish-to-s3.yml -f version=v0.1.3`
-
-   This uploads the four release binaries to:
-   ```
-   s3://lob-nomad-autoscaler-plugins/cloudwatch/<version>/nomad-autoscaler-cloudwatch-apm_linux_amd64
-   s3://lob-nomad-autoscaler-plugins/cloudwatch/<version>/nomad-autoscaler-cloudwatch-apm_linux_arm64
-   s3://lob-nomad-autoscaler-plugins/cloudwatch/<version>/nomad-autoscaler-cloudwatch-apm_darwin_amd64
-   s3://lob-nomad-autoscaler-plugins/cloudwatch/<version>/nomad-autoscaler-cloudwatch-apm_darwin_arm64
-   ```
-
-5. **Update `terraform-services`** — bump the `cloudwatch_apm_plugin_version` variable in each environment where the plugin is deployed. The variable is set in the following files in the [`terraform-services`](https://github.com/lob/terraform-services) repo:
-
-   | Environment | File |
-   |---|---|
-   | sandbox | `sandbox/nomad_stack/nomad/main.tf` |
-   | staging | `staging/nomad_stack/nomad/main.tf` |
-   | staging (render) | `staging/render_nomad_stack/nomad/main.tf` |
-   | production | `production/nomad_stack/nomad/main.tf` |
-   | production (render) | `production/render_nomad_stack/nomad/main.tf` |
-
-   Change the value in each file, for example:
-   ```hcl
-   cloudwatch_apm_plugin_version = "v0.1.3"
-   ```
-
-   Open a PR, merge it, and apply the Terraform changes for each environment. The Nomad autoscaler will download the new plugin binary from S3 on its next restart or re-deploy.
+If you are deploying this plugin internally at Lob, see the [Autoscaling apps in Nomad](https://www.notion.so/d76e950303dd4fb58140ba2bd3f60e5b) Notion page for release and deployment instructions.
 
