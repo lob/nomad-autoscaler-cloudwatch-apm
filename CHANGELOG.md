@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+---
+
+## [0.2.1]
+
 ### Security
 
 - Upgraded `golang.org/x/net` from `v0.0.0-20210226...` → `v0.55.0`, resolving CVEs GO-2026-5026, GO-2026-4918, GO-2026-4440/4441, and associated HTML parser findings (GO-2026-5024 through 5030).
